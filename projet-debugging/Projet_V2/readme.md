@@ -38,11 +38,3 @@ Voir la vidéo de démonstration à ouvrir avec **VLC** .
 
 Nous n'avons pas réussi à implémenter la méthode stack-top et break-before-method-call.
 
-**Remarque :**
-
-Lors de la création du projet sous InteliJ celui-ci s'éxecutait uniquement sur la machine de la personne qui l'a crée.
-Donc un nouveau projet a dû être créer via sa machine; mais le problème persiste (pas moyen d'executer le projet par la personne qui n'a PAS crée le projet).
-
-On a dû donc travailler chacune sur la version du projet créer sur sa machine pour éviter de perdre beaucoup de temps à resoudre le problème, et donc à chaque fois faire un copier coller des méthodes implémenté par l'autre binôme pour s'assurer que tout marche ensuite faire un push sur GitLab.
-
-Nous avons également fourni une vidéo de démonstration pour montrer que notre programme marche.
