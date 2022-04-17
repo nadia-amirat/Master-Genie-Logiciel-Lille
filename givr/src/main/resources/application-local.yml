@@ -1,0 +1,47 @@
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    generate-ddl: true
+    properties:
+      hibernate:
+        enable_lazy_load_no_trans: true
+  datasource:
+    url: jdbc:h2:mem:db
+    username: sa
+    password:
+  sql:
+    init:
+      mode: always
+  h2:
+    console:
+      enabled: true
+
+jwt:
+  secret: local
+account:
+  init_default_admin: true
+  register:
+    mail:
+      subject: Confirm your mail
+      content: Click <a href="{link}">here</a> to valid your account
+      tag-link: "{link}"
+    token:
+      secret: local_register
+      validity: 86400000
+  modify:
+    mail:
+      subject: Change account's email
+      content: Click <a href="{link}">here</a> to change your email account to {new_email}.
+      tag-link: "{link}"
+      tag-email: "{new_email}"
+    token:
+      secret: local_modify
+      validity: 86400000
+spring.mail.host : smtp.office365.com
+spring.mail.port : 587
+spring.mail.password : '%BEP(g&jn$&&ly1Q1!5bWd'
+spring.mail.username : glmbroker21@outlook.com
+spring.mail.properties.mail.smtp.starttls.enable : true
+spring.mail.properties.mail.smpt.auth : true

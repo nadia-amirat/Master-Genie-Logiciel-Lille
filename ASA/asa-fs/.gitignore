@@ -1,0 +1,11 @@
+# les objets de compilation
+*.o
+
+# les exécutables
+mkhd mbr drive frmt dump mkvol dvol
+
+# les images disques
+*.bin
+
+# les fichiers divers
+*~

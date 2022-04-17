@@ -1,0 +1,21 @@
+spring:
+  main:
+    web-application-type: servlet
+    banner-mode: off
+  profiles:
+    active:
+      - local
+  mvc:
+    view:
+      prefix: /WEB-INF/views/
+      suffix: .jsp
+
+# Netty
+server:
+  port: 8080
+  compression.enabled: true
+  error.whitelabel.enabled: false
+
+logging:
+  level:
+    root: info

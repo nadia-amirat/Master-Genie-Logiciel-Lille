@@ -1,0 +1,75 @@
+stages:
+  - build
+  - publish
+  - deploy
+  # - test
+
+maven-build:
+  image: maven:3-jdk-11
+  tags:
+    - build
+  only:
+    - develop
+    - master
+  stage: build
+  script: "mvn clean package"
+  artifacts:
+    expire_in: 10 mins
+    paths:
+      - target/*.war
+
+publish:
+  only:
+    - master
+  tags:
+    - build
+  image: docker:latest
+  stage: publish
+  services:
+    - docker:dind
+  script:
+    # login to docker
+    # - docker login -u pranwez -p $DOCKER_PASS
+    # build and tag docker image
+    # - docker build -t pranwez/devops:latest -t pranwez/devops:$CI_COMMIT_SHORT_SHA .
+    - docker build -t localhost:5000/devops:latest -t localhost:5000/devops:$CI_COMMIT_SHORT_SHA .
+    # publish finished image
+    # - docker push pranwez/devops:latest
+    # - docker push pranwez/devops:$CI_COMMIT_SHORT_SHA
+    - docker push localhost:5000/devops:latest
+    - docker push localhost:5000/devops:$CI_COMMIT_SHORT_SHA
+
+deploy:
+  image: alpine:latest
+  only:
+    - master
+  stage: deploy
+  tags:
+    - deployment
+  script:
+    - chmod og= $ID_RSA
+    - apk update && apk add openssh-client
+    # - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker login -u pranwez -p $DOCKER_PASS"
+    # - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker pull pranwez/devops:latest"
+    - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker pull localhost:5000/devops:latest"
+    - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker container rm -f $CI_PROJECT_NAME || true"
+    - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker run -d --restart unless-stopped -p 8080:8080 --name $CI_PROJECT_NAME localhost:5000/devops:latest"
+  environment:
+    name: production
+    url: http://172.28.101.8:8080
+  only:
+    - master
+
+# test:
+#   image: alpine:latest
+#   only:
+#     - master
+#   stage: test
+#   tags:
+#     - deployment
+#   script:
+#     - apk update && apk add curl
+#     - sleep 2m
+#     - bash -c 'if [[ "$(curl --insecure -s -o /dev/null -w ''%{http_code}'' http://$SERVER_USER:8080/ping)" != "200" ]]; then exit 0; fi'
+#   only:
+#     - master
