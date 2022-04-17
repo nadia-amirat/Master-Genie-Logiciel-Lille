@@ -1,0 +1,7 @@
+@startuml
+'https://plantuml.com/object-diagram
+
+object StockController
+object StockRepository
+object Stock
+@enduml
